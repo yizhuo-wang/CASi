@@ -1,0 +1,159 @@
+---
+title: "CASi"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{CASi}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+CASi is a comprehensive framework for analyzing longitudinal scRNA-seq data, which provides users with: (1) cross-time points cell annotation, (2) detection of potentially novel cell types emerged over time, (3) visualization of cell population evolution, and (4) identification of temporal differentially expressed genes (tDEGs). This vignette introduces the functions of the CASi package and shows how it analyzes longitudinal scRNA-seq data. CASi was created by Yizhuo Wang, Ziyi Li and Xuelin Huang, and is now maintained by Yizhuo Wang.  
+
+Install **CASi** using the code below.
+
+```{r setup}
+# install.packages("CASi")
+library(CASi)
+```
+
+Make sure that Python is installed to load all required dependencies.
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+# install.packages("tensorflow")
+# install.packages("reticulate")  
+# 
+# library(reticulate)
+# install_miniconda()
+# # use_condaenv("r-miniconda", required = TRUE)
+# 
+# library(tensorflow)
+# library(keras)
+
+# library(tensorflow)
+# library(keras)
+# library(Seurat)
+# library(umap)
+# library(dplyr)
+# library(ggplot2)
+# library(stringr)
+```
+
+
+**CASi** has four functions in total. A simulated longitudinal scRNA-seq dataset is used here to demonstrate the usages of these two functions. We obtain a publicly available dataset of peripheral blood mononuclear cells (PBMC)[1], containing more than 60,000 sorted cells from eight immune cell types. We randomly extract cells from five cell types to build the simulation data. The demo pbmc data, "pbmc_demo", has been lazy-loaded with the package. It is a list of four items: 
+* 1. train_count: used as The initial time point's gene expression. 
+* 2. train_label: used as The initial time point's cell label.
+* 3. test_count: used as following time points' gene expression.
+* 4. test_label: the following time points' cell labels, which is not known in reality.
+* 5. Meta data: contains Group and Time information.
+
+```{r}
+data(pbmc_demo)
+names(pbmc_demo)
+```
+
+
+## Create a CASi list
+
+The first step is to create a CASi object using the data. The longitudinal scRNA-seq should be seperated to two subsets regardless of how many time points you have, one includes the initial time point's data ($t_{0}$) and one includes all the following time points' data ($t_{1}$). This is because we always want to use only the initial time point's data as the training data to prevent any potential bias during the training process. 
+
+The labels/cell types of $t_{0}$ data is optional. If you do not provide CASi with the cell labels, CASi will first perform an unsupervised clustering for unlabeled data and use the clustering number (e.g., C1, C2, C3...) as the cell type labels. Note that CASi will automatically select a smaller set of informative features/genes for computational efficiency. Below are the input parameters of the CreatCASiList function:
+
+* t0_count: Gene expression matrix of the initial data point/t0.
+* t1_count: Gene expression matrix of the following data points/t1.
+* t0_label: Cell labels of the initial data point.
+* nfeature: The number of top highly variable genes. Default to 2000. 
+
+```{r message=FALSE, warning=FALSE}
+l1 <- CreateCASiList(t0_count = as.matrix(pbmc_demo[[1]]), t1_count = as.matrix(pbmc_demo[[3]]), t0_label = pbmc_demo[[2]])
+```
+
+The CASi list should contain three elements:
+
+```{r}
+names(l1)
+```
+
+
+## Cross timepoints annotation
+
+CASi uses an artificial neural network built on Keras to annotate cells of $t_{1}$ data. The Keras R interface uses the TensorFlow backend engine by default. So please make sure you have installed the Tensorflow package properly. Below are the input parameters of the CrossTimeAnnotation function:
+
+* CASiList: The CASi list.
+* DrawUMAP: Draw UMAP plots per time points and cell labels. Default to TRUE.
+
+```{r message=FALSE, warning=FALSE}
+l1 <- CrossTimeAnnotation(l1)
+```
+
+The CASi list after this function should contain six elements:
+
+```{r message=FALSE, warning=FALSE}
+names(l1)
+```
+
+
+
+## Detect novel cells
+
+
+The next step of CASi is to identify any novel cell types that have emerged over time. When data of interest is collected from multiple time points' samples, it is highly possible that the some cells such as tumor cells will differentiate and new cell types (e.g., a distinct subclone of tumor cells) might appear. This step helps to distinguish those new cell types from existing cell types. For the DetectNovelCells function, we have the following parameters:
+
+* CASiList: The CASi list.
+* corr.cutoff: The cutoff correlation value to determine novel cells. Default to 0.4. Cells with the correlation larger than 0.4 will not be considered novel cells.
+* p.cutoff: The cutoff p value of t-tests to determine novel cells. Default to 0.01. Cells with the p value smaller than 0.01 will be considered novel cells.
+* DrawUMAP: Draw UMAP plots per cell type-specific correlation and cell labels.
+
+```{r message=FALSE, warning=FALSE}
+l1 <- DetectNovelCells(l1)
+```
+The CASi list after this function should contain seven elements:
+
+```{r}
+names(l1)
+```
+
+
+
+## Find temporal differentially expressed genes (tDEGs)
+
+This step performs differential analysis tailored to longitudinal scRNA-seq data. We combine a generalized linear model with iterative feature selection to select genes that have apparent increasing/decreasing behavior over time and genes that behave differently along time in different groups. Users of this function must provide the metadata of two variables: 'Group', which should be a binary factor variable, and 'Time', which can be either numerical or categorical variable. Below are the input parameters of the FindTemporalDEGs function:
+
+* CASiList: The CASi list.
+* metadata The dataframe containing the Group variable and the Time variable.
+* pct.cutoff The percentage of cells that the gene is expressed. Default to 0.3.
+* p.cutoff The cutoff p value of t-tests to determine tDEGs. Default to 0.05. Genes with the p value smaller than 0.05 will be considered tDEGs.
+
+
+To demonstrate this function, we manually adjusted the previous simulation dataset by adding cell-type-specific time/group effect. The 
+demonstration list, "CASiList_tDEG_demo" and its corresponding metadata, "metadata_tDEG_demo" have been been lazy-loaded with the package. As shown below, the metadata should contain a Group variable and a Time variable, and the row number should match the total cell number of your data.
+
+```{r}
+data("CASiList_tDEG_demo")
+data("metadata_tDEG_demo")
+
+summary(metadata_tDEG_demo)
+
+nCell_t0 <- length(CASiList_tDEG_demo[[2]])
+nCell_t1 <- length(CASiList_tDEG_demo[[6]])
+nCell_t0 + nCell_t1
+```
+
+
+
+```{r message=FALSE, warning=FALSE}
+l2 <- FindTemporalDEGs(CASiList_tDEG_demo, metadata_tDEG_demo)
+```
+
+The CASi list after this function should contain eight elements:
+
+```{r}
+names(l2)
+```
+

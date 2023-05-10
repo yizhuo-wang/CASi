@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>CASi</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">CASi</h1>
+
+
+
+<p>CASi is a comprehensive framework for analyzing longitudinal
+scRNA-seq data, which provides users with: (1) cross-time points cell
+annotation, (2) detection of potentially novel cell types emerged over
+time, (3) visualization of cell population evolution, and (4)
+identification of temporal differentially expressed genes (tDEGs). This
+vignette introduces the functions of the CASi package and shows how it
+analyzes longitudinal scRNA-seq data. CASi was created by Yizhuo Wang,
+Ziyi Li and Xuelin Huang, and is now maintained by Yizhuo Wang.</p>
+<p>Install <strong>CASi</strong> using the code below.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;CASi&quot;)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(CASi)</span></code></pre></div>
+<p>Make sure that Python is installed to load all required
+dependencies.</p>
+<p><strong>CASi</strong> has four functions in total. A simulated
+longitudinal scRNA-seq dataset is used here to demonstrate the usages of
+these two functions. We obtain a publicly available dataset of
+peripheral blood mononuclear cells (PBMC)[1], containing more than
+60,000 sorted cells from eight immune cell types. We randomly extract
+cells from five cell types to build the simulation data. The demo pbmc
+data, “pbmc_demo”, has been lazy-loaded with the package. It is a list
+of four items: * 1. train_count: used as The initial time point’s gene
+expression. * 2. train_label: used as The initial time point’s cell
+label. * 3. test_count: used as following time points’ gene expression.
+* 4. test_label: the following time points’ cell labels, which is not
+known in reality. * 5. Meta data: contains Group and Time
+information.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(pbmc_demo)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pbmc_demo)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;train_count&quot; &quot;train_label&quot; &quot;test_count&quot;  &quot;test_label&quot;</span></span></code></pre></div>
+<div id="create-a-casi-list" class="section level2">
+<h2>Create a CASi list</h2>
+<p>The first step is to create a CASi object using the data. The
+longitudinal scRNA-seq should be seperated to two subsets regardless of
+how many time points you have, one includes the initial time point’s
+data (<span class="math inline">\(t_{0}\)</span>) and one includes all
+the following time points’ data (<span class="math inline">\(t_{1}\)</span>). This is because we always want to
+use only the initial time point’s data as the training data to prevent
+any potential bias during the training process.</p>
+<p>The labels/cell types of <span class="math inline">\(t_{0}\)</span>
+data is optional. If you do not provide CASi with the cell labels, CASi
+will first perform an unsupervised clustering for unlabeled data and use
+the clustering number (e.g., C1, C2, C3…) as the cell type labels. Note
+that CASi will automatically select a smaller set of informative
+features/genes for computational efficiency. Below are the input
+parameters of the CreatCASiList function:</p>
+<ul>
+<li>t0_count: Gene expression matrix of the initial data point/t0.</li>
+<li>t1_count: Gene expression matrix of the following data
+points/t1.</li>
+<li>t0_label: Cell labels of the initial data point.</li>
+<li>nfeature: The number of top highly variable genes. Default to
+2000.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>l1 <span class="ot">&lt;-</span> <span class="fu">CreateCASiList</span>(<span class="at">t0_count =</span> <span class="fu">as.matrix</span>(pbmc_demo[[<span class="dv">1</span>]]), <span class="at">t1_count =</span> <span class="fu">as.matrix</span>(pbmc_demo[[<span class="dv">3</span>]]), <span class="at">t0_label =</span> pbmc_demo[[<span class="dv">2</span>]])</span></code></pre></div>
+<p>The CASi list should contain three elements:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(l1)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Data: t0 cells gene expression&quot; &quot;Data: t0 cell types&quot;           </span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3] &quot;Data: t1 cell gene expression&quot;</span></span></code></pre></div>
+</div>
+<div id="cross-timepoints-annotation" class="section level2">
+<h2>Cross timepoints annotation</h2>
+<p>CASi uses an artificial neural network built on Keras to annotate
+cells of <span class="math inline">\(t_{1}\)</span> data. The Keras R
+interface uses the TensorFlow backend engine by default. So please make
+sure you have installed the Tensorflow package properly. Below are the
+input parameters of the CrossTimeAnnotation function:</p>
+<ul>
+<li>CASiList: The CASi list.</li>
+<li>DrawUMAP: Draw UMAP plots per time points and cell labels. Default
+to TRUE.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>l1 <span class="ot">&lt;-</span> <span class="fu">CrossTimeAnnotation</span>(l1)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --><img src="data:image/png;base64,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" /><!-- --></p>
+<p>The CASi list after this function should contain six elements:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(l1)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Data: t0 cells gene expression&quot;   &quot;Data: t0 cell types&quot;             </span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3] &quot;Data: t1 cell gene expression&quot;    &quot;Neural network: setting&quot;         </span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5] &quot;Neural network: training history&quot; &quot;Data: t1 cell types&quot;</span></span></code></pre></div>
+</div>
+<div id="detect-novel-cells" class="section level2">
+<h2>Detect novel cells</h2>
+<p>The next step of CASi is to identify any novel cell types that have
+emerged over time. When data of interest is collected from multiple time
+points’ samples, it is highly possible that the some cells such as tumor
+cells will differentiate and new cell types (e.g., a distinct subclone
+of tumor cells) might appear. This step helps to distinguish those new
+cell types from existing cell types. For the DetectNovelCells function,
+we have the following parameters:</p>
+<ul>
+<li>CASiList: The CASi list.</li>
+<li>corr.cutoff: The cutoff correlation value to determine novel cells.
+Default to 0.4. Cells with the correlation larger than 0.4 will not be
+considered novel cells.</li>
+<li>p.cutoff: The cutoff p value of t-tests to determine novel cells.
+Default to 0.01. Cells with the p value smaller than 0.01 will be
+considered novel cells.</li>
+<li>DrawUMAP: Draw UMAP plots per cell type-specific correlation and
+cell labels.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>l1 <span class="ot">&lt;-</span> <span class="fu">DetectNovelCells</span>(l1)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 362</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 18353</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9990</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 362</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 18353</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9913</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 2</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9990</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9890</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9790</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9690</span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9590</span></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9490</span></span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9390</span></span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9290</span></span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9190</span></span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9090</span></span>
+<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8990</span></span>
+<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8890</span></span>
+<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8790</span></span>
+<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8690</span></span>
+<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8590</span></span>
+<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8490</span></span>
+<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8390</span></span>
+<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8290</span></span>
+<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8190</span></span>
+<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-193"><a href="#cb7-193" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-194"><a href="#cb7-194" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-195"><a href="#cb7-195" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-196"><a href="#cb7-196" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-197"><a href="#cb7-197" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8090</span></span>
+<span id="cb7-198"><a href="#cb7-198" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-199"><a href="#cb7-199" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-200"><a href="#cb7-200" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-201"><a href="#cb7-201" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-202"><a href="#cb7-202" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-203"><a href="#cb7-203" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-204"><a href="#cb7-204" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-205"><a href="#cb7-205" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-206"><a href="#cb7-206" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7990</span></span>
+<span id="cb7-207"><a href="#cb7-207" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-208"><a href="#cb7-208" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-209"><a href="#cb7-209" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-210"><a href="#cb7-210" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-211"><a href="#cb7-211" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-212"><a href="#cb7-212" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-213"><a href="#cb7-213" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-214"><a href="#cb7-214" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-215"><a href="#cb7-215" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7890</span></span>
+<span id="cb7-216"><a href="#cb7-216" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-217"><a href="#cb7-217" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-218"><a href="#cb7-218" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-219"><a href="#cb7-219" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-220"><a href="#cb7-220" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-221"><a href="#cb7-221" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-222"><a href="#cb7-222" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-223"><a href="#cb7-223" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-224"><a href="#cb7-224" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7790</span></span>
+<span id="cb7-225"><a href="#cb7-225" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-226"><a href="#cb7-226" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-227"><a href="#cb7-227" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-228"><a href="#cb7-228" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-229"><a href="#cb7-229" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-230"><a href="#cb7-230" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-231"><a href="#cb7-231" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-232"><a href="#cb7-232" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-233"><a href="#cb7-233" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7690</span></span>
+<span id="cb7-234"><a href="#cb7-234" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-235"><a href="#cb7-235" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-236"><a href="#cb7-236" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-237"><a href="#cb7-237" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-238"><a href="#cb7-238" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-239"><a href="#cb7-239" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-240"><a href="#cb7-240" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-241"><a href="#cb7-241" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-242"><a href="#cb7-242" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7590</span></span>
+<span id="cb7-243"><a href="#cb7-243" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-244"><a href="#cb7-244" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-245"><a href="#cb7-245" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-246"><a href="#cb7-246" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-247"><a href="#cb7-247" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-248"><a href="#cb7-248" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-249"><a href="#cb7-249" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-250"><a href="#cb7-250" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-251"><a href="#cb7-251" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7490</span></span>
+<span id="cb7-252"><a href="#cb7-252" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-253"><a href="#cb7-253" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-254"><a href="#cb7-254" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-255"><a href="#cb7-255" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-256"><a href="#cb7-256" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-257"><a href="#cb7-257" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-258"><a href="#cb7-258" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-259"><a href="#cb7-259" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-260"><a href="#cb7-260" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7390</span></span>
+<span id="cb7-261"><a href="#cb7-261" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-262"><a href="#cb7-262" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-263"><a href="#cb7-263" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-264"><a href="#cb7-264" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-265"><a href="#cb7-265" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-266"><a href="#cb7-266" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-267"><a href="#cb7-267" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-268"><a href="#cb7-268" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-269"><a href="#cb7-269" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7290</span></span>
+<span id="cb7-270"><a href="#cb7-270" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-271"><a href="#cb7-271" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-272"><a href="#cb7-272" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-273"><a href="#cb7-273" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-274"><a href="#cb7-274" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-275"><a href="#cb7-275" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-276"><a href="#cb7-276" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-277"><a href="#cb7-277" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-278"><a href="#cb7-278" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7190</span></span>
+<span id="cb7-279"><a href="#cb7-279" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-280"><a href="#cb7-280" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-281"><a href="#cb7-281" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-282"><a href="#cb7-282" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-283"><a href="#cb7-283" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-284"><a href="#cb7-284" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-285"><a href="#cb7-285" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-286"><a href="#cb7-286" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-287"><a href="#cb7-287" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7090</span></span>
+<span id="cb7-288"><a href="#cb7-288" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-289"><a href="#cb7-289" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-290"><a href="#cb7-290" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-291"><a href="#cb7-291" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-292"><a href="#cb7-292" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-293"><a href="#cb7-293" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-294"><a href="#cb7-294" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-295"><a href="#cb7-295" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-296"><a href="#cb7-296" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.6990</span></span>
+<span id="cb7-297"><a href="#cb7-297" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-298"><a href="#cb7-298" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-299"><a href="#cb7-299" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-300"><a href="#cb7-300" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-301"><a href="#cb7-301" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-302"><a href="#cb7-302" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-303"><a href="#cb7-303" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-304"><a href="#cb7-304" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-305"><a href="#cb7-305" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.6890</span></span>
+<span id="cb7-306"><a href="#cb7-306" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-307"><a href="#cb7-307" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-308"><a href="#cb7-308" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-309"><a href="#cb7-309" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-310"><a href="#cb7-310" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-311"><a href="#cb7-311" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-312"><a href="#cb7-312" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-313"><a href="#cb7-313" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-314"><a href="#cb7-314" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.6790</span></span>
+<span id="cb7-315"><a href="#cb7-315" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-316"><a href="#cb7-316" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-317"><a href="#cb7-317" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-318"><a href="#cb7-318" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-319"><a href="#cb7-319" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-320"><a href="#cb7-320" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-321"><a href="#cb7-321" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-322"><a href="#cb7-322" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-323"><a href="#cb7-323" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.6690</span></span>
+<span id="cb7-324"><a href="#cb7-324" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-325"><a href="#cb7-325" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-326"><a href="#cb7-326" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-327"><a href="#cb7-327" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-328"><a href="#cb7-328" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-329"><a href="#cb7-329" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-330"><a href="#cb7-330" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-331"><a href="#cb7-331" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-332"><a href="#cb7-332" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.6590</span></span>
+<span id="cb7-333"><a href="#cb7-333" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-334"><a href="#cb7-334" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-335"><a href="#cb7-335" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-336"><a href="#cb7-336" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-337"><a href="#cb7-337" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-338"><a href="#cb7-338" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-339"><a href="#cb7-339" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-340"><a href="#cb7-340" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-341"><a href="#cb7-341" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.6490</span></span>
+<span id="cb7-342"><a href="#cb7-342" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-343"><a href="#cb7-343" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-344"><a href="#cb7-344" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-345"><a href="#cb7-345" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-346"><a href="#cb7-346" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-347"><a href="#cb7-347" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-348"><a href="#cb7-348" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-349"><a href="#cb7-349" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-350"><a href="#cb7-350" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.6390</span></span>
+<span id="cb7-351"><a href="#cb7-351" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-352"><a href="#cb7-352" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-353"><a href="#cb7-353" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-354"><a href="#cb7-354" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-355"><a href="#cb7-355" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-356"><a href="#cb7-356" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-357"><a href="#cb7-357" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-358"><a href="#cb7-358" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-359"><a href="#cb7-359" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.6290</span></span>
+<span id="cb7-360"><a href="#cb7-360" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-361"><a href="#cb7-361" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-362"><a href="#cb7-362" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-363"><a href="#cb7-363" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-364"><a href="#cb7-364" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-365"><a href="#cb7-365" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-366"><a href="#cb7-366" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-367"><a href="#cb7-367" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-368"><a href="#cb7-368" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.6190</span></span>
+<span id="cb7-369"><a href="#cb7-369" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-370"><a href="#cb7-370" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-371"><a href="#cb7-371" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-372"><a href="#cb7-372" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-373"><a href="#cb7-373" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-374"><a href="#cb7-374" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-375"><a href="#cb7-375" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-376"><a href="#cb7-376" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-377"><a href="#cb7-377" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.6090</span></span>
+<span id="cb7-378"><a href="#cb7-378" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-379"><a href="#cb7-379" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-380"><a href="#cb7-380" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-381"><a href="#cb7-381" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-382"><a href="#cb7-382" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-383"><a href="#cb7-383" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-384"><a href="#cb7-384" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-385"><a href="#cb7-385" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-386"><a href="#cb7-386" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.5990</span></span>
+<span id="cb7-387"><a href="#cb7-387" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-388"><a href="#cb7-388" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-389"><a href="#cb7-389" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-390"><a href="#cb7-390" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-391"><a href="#cb7-391" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-392"><a href="#cb7-392" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-393"><a href="#cb7-393" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-394"><a href="#cb7-394" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-395"><a href="#cb7-395" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.5890</span></span>
+<span id="cb7-396"><a href="#cb7-396" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-397"><a href="#cb7-397" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-398"><a href="#cb7-398" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-399"><a href="#cb7-399" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-400"><a href="#cb7-400" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-401"><a href="#cb7-401" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-402"><a href="#cb7-402" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-403"><a href="#cb7-403" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-404"><a href="#cb7-404" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.5790</span></span>
+<span id="cb7-405"><a href="#cb7-405" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-406"><a href="#cb7-406" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-407"><a href="#cb7-407" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-408"><a href="#cb7-408" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-409"><a href="#cb7-409" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 307</span></span>
+<span id="cb7-410"><a href="#cb7-410" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 17256</span></span>
+<span id="cb7-411"><a href="#cb7-411" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-412"><a href="#cb7-412" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-413"><a href="#cb7-413" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.5700</span></span>
+<span id="cb7-414"><a href="#cb7-414" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 2</span></span>
+<span id="cb7-415"><a href="#cb7-415" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-416"><a href="#cb7-416" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-417"><a href="#cb7-417" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-418"><a href="#cb7-418" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-419"><a href="#cb7-419" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-420"><a href="#cb7-420" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-421"><a href="#cb7-421" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-422"><a href="#cb7-422" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9990</span></span>
+<span id="cb7-423"><a href="#cb7-423" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-424"><a href="#cb7-424" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-425"><a href="#cb7-425" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-426"><a href="#cb7-426" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-427"><a href="#cb7-427" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-428"><a href="#cb7-428" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-429"><a href="#cb7-429" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-430"><a href="#cb7-430" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-431"><a href="#cb7-431" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9890</span></span>
+<span id="cb7-432"><a href="#cb7-432" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-433"><a href="#cb7-433" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-434"><a href="#cb7-434" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-435"><a href="#cb7-435" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-436"><a href="#cb7-436" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-437"><a href="#cb7-437" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-438"><a href="#cb7-438" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-439"><a href="#cb7-439" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-440"><a href="#cb7-440" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9790</span></span>
+<span id="cb7-441"><a href="#cb7-441" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-442"><a href="#cb7-442" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-443"><a href="#cb7-443" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-444"><a href="#cb7-444" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-445"><a href="#cb7-445" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-446"><a href="#cb7-446" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-447"><a href="#cb7-447" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-448"><a href="#cb7-448" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-449"><a href="#cb7-449" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9690</span></span>
+<span id="cb7-450"><a href="#cb7-450" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-451"><a href="#cb7-451" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-452"><a href="#cb7-452" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-453"><a href="#cb7-453" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-454"><a href="#cb7-454" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-455"><a href="#cb7-455" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-456"><a href="#cb7-456" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-457"><a href="#cb7-457" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-458"><a href="#cb7-458" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9590</span></span>
+<span id="cb7-459"><a href="#cb7-459" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-460"><a href="#cb7-460" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-461"><a href="#cb7-461" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-462"><a href="#cb7-462" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-463"><a href="#cb7-463" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-464"><a href="#cb7-464" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-465"><a href="#cb7-465" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-466"><a href="#cb7-466" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-467"><a href="#cb7-467" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9490</span></span>
+<span id="cb7-468"><a href="#cb7-468" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-469"><a href="#cb7-469" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-470"><a href="#cb7-470" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-471"><a href="#cb7-471" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-472"><a href="#cb7-472" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-473"><a href="#cb7-473" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-474"><a href="#cb7-474" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-475"><a href="#cb7-475" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-476"><a href="#cb7-476" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9390</span></span>
+<span id="cb7-477"><a href="#cb7-477" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-478"><a href="#cb7-478" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-479"><a href="#cb7-479" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-480"><a href="#cb7-480" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-481"><a href="#cb7-481" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-482"><a href="#cb7-482" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-483"><a href="#cb7-483" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-484"><a href="#cb7-484" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-485"><a href="#cb7-485" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9290</span></span>
+<span id="cb7-486"><a href="#cb7-486" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-487"><a href="#cb7-487" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-488"><a href="#cb7-488" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-489"><a href="#cb7-489" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-490"><a href="#cb7-490" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-491"><a href="#cb7-491" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-492"><a href="#cb7-492" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-493"><a href="#cb7-493" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-494"><a href="#cb7-494" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9190</span></span>
+<span id="cb7-495"><a href="#cb7-495" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-496"><a href="#cb7-496" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-497"><a href="#cb7-497" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-498"><a href="#cb7-498" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-499"><a href="#cb7-499" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-500"><a href="#cb7-500" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-501"><a href="#cb7-501" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-502"><a href="#cb7-502" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-503"><a href="#cb7-503" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9090</span></span>
+<span id="cb7-504"><a href="#cb7-504" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-505"><a href="#cb7-505" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-506"><a href="#cb7-506" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-507"><a href="#cb7-507" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-508"><a href="#cb7-508" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-509"><a href="#cb7-509" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-510"><a href="#cb7-510" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-511"><a href="#cb7-511" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-512"><a href="#cb7-512" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8990</span></span>
+<span id="cb7-513"><a href="#cb7-513" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-514"><a href="#cb7-514" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-515"><a href="#cb7-515" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-516"><a href="#cb7-516" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-517"><a href="#cb7-517" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-518"><a href="#cb7-518" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-519"><a href="#cb7-519" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-520"><a href="#cb7-520" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-521"><a href="#cb7-521" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8890</span></span>
+<span id="cb7-522"><a href="#cb7-522" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-523"><a href="#cb7-523" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-524"><a href="#cb7-524" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-525"><a href="#cb7-525" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-526"><a href="#cb7-526" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-527"><a href="#cb7-527" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-528"><a href="#cb7-528" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-529"><a href="#cb7-529" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-530"><a href="#cb7-530" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8790</span></span>
+<span id="cb7-531"><a href="#cb7-531" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-532"><a href="#cb7-532" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-533"><a href="#cb7-533" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-534"><a href="#cb7-534" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-535"><a href="#cb7-535" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-536"><a href="#cb7-536" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-537"><a href="#cb7-537" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-538"><a href="#cb7-538" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-539"><a href="#cb7-539" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8690</span></span>
+<span id="cb7-540"><a href="#cb7-540" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-541"><a href="#cb7-541" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-542"><a href="#cb7-542" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-543"><a href="#cb7-543" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-544"><a href="#cb7-544" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-545"><a href="#cb7-545" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-546"><a href="#cb7-546" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-547"><a href="#cb7-547" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-548"><a href="#cb7-548" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8590</span></span>
+<span id="cb7-549"><a href="#cb7-549" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-550"><a href="#cb7-550" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-551"><a href="#cb7-551" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-552"><a href="#cb7-552" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-553"><a href="#cb7-553" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-554"><a href="#cb7-554" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-555"><a href="#cb7-555" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-556"><a href="#cb7-556" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-557"><a href="#cb7-557" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8490</span></span>
+<span id="cb7-558"><a href="#cb7-558" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-559"><a href="#cb7-559" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-560"><a href="#cb7-560" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-561"><a href="#cb7-561" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-562"><a href="#cb7-562" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-563"><a href="#cb7-563" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-564"><a href="#cb7-564" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-565"><a href="#cb7-565" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-566"><a href="#cb7-566" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8390</span></span>
+<span id="cb7-567"><a href="#cb7-567" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-568"><a href="#cb7-568" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-569"><a href="#cb7-569" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-570"><a href="#cb7-570" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-571"><a href="#cb7-571" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-572"><a href="#cb7-572" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-573"><a href="#cb7-573" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-574"><a href="#cb7-574" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-575"><a href="#cb7-575" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8290</span></span>
+<span id="cb7-576"><a href="#cb7-576" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-577"><a href="#cb7-577" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-578"><a href="#cb7-578" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-579"><a href="#cb7-579" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-580"><a href="#cb7-580" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-581"><a href="#cb7-581" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-582"><a href="#cb7-582" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-583"><a href="#cb7-583" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-584"><a href="#cb7-584" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8190</span></span>
+<span id="cb7-585"><a href="#cb7-585" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-586"><a href="#cb7-586" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-587"><a href="#cb7-587" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-588"><a href="#cb7-588" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-589"><a href="#cb7-589" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-590"><a href="#cb7-590" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-591"><a href="#cb7-591" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-592"><a href="#cb7-592" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-593"><a href="#cb7-593" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.8090</span></span>
+<span id="cb7-594"><a href="#cb7-594" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-595"><a href="#cb7-595" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-596"><a href="#cb7-596" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-597"><a href="#cb7-597" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-598"><a href="#cb7-598" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-599"><a href="#cb7-599" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-600"><a href="#cb7-600" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-601"><a href="#cb7-601" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-602"><a href="#cb7-602" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7990</span></span>
+<span id="cb7-603"><a href="#cb7-603" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-604"><a href="#cb7-604" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-605"><a href="#cb7-605" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-606"><a href="#cb7-606" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-607"><a href="#cb7-607" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-608"><a href="#cb7-608" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-609"><a href="#cb7-609" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-610"><a href="#cb7-610" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-611"><a href="#cb7-611" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7890</span></span>
+<span id="cb7-612"><a href="#cb7-612" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-613"><a href="#cb7-613" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-614"><a href="#cb7-614" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-615"><a href="#cb7-615" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-616"><a href="#cb7-616" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-617"><a href="#cb7-617" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-618"><a href="#cb7-618" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-619"><a href="#cb7-619" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-620"><a href="#cb7-620" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7790</span></span>
+<span id="cb7-621"><a href="#cb7-621" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-622"><a href="#cb7-622" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-623"><a href="#cb7-623" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-624"><a href="#cb7-624" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-625"><a href="#cb7-625" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-626"><a href="#cb7-626" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-627"><a href="#cb7-627" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-628"><a href="#cb7-628" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-629"><a href="#cb7-629" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7690</span></span>
+<span id="cb7-630"><a href="#cb7-630" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-631"><a href="#cb7-631" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-632"><a href="#cb7-632" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-633"><a href="#cb7-633" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-634"><a href="#cb7-634" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-635"><a href="#cb7-635" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-636"><a href="#cb7-636" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-637"><a href="#cb7-637" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-638"><a href="#cb7-638" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7590</span></span>
+<span id="cb7-639"><a href="#cb7-639" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-640"><a href="#cb7-640" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-641"><a href="#cb7-641" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-642"><a href="#cb7-642" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-643"><a href="#cb7-643" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-644"><a href="#cb7-644" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-645"><a href="#cb7-645" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-646"><a href="#cb7-646" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-647"><a href="#cb7-647" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7490</span></span>
+<span id="cb7-648"><a href="#cb7-648" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-649"><a href="#cb7-649" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-650"><a href="#cb7-650" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-651"><a href="#cb7-651" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-652"><a href="#cb7-652" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-653"><a href="#cb7-653" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-654"><a href="#cb7-654" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-655"><a href="#cb7-655" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-656"><a href="#cb7-656" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7390</span></span>
+<span id="cb7-657"><a href="#cb7-657" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-658"><a href="#cb7-658" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-659"><a href="#cb7-659" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-660"><a href="#cb7-660" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-661"><a href="#cb7-661" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-662"><a href="#cb7-662" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-663"><a href="#cb7-663" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-664"><a href="#cb7-664" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-665"><a href="#cb7-665" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7290</span></span>
+<span id="cb7-666"><a href="#cb7-666" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-667"><a href="#cb7-667" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-668"><a href="#cb7-668" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-669"><a href="#cb7-669" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-670"><a href="#cb7-670" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-671"><a href="#cb7-671" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-672"><a href="#cb7-672" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-673"><a href="#cb7-673" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-674"><a href="#cb7-674" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7190</span></span>
+<span id="cb7-675"><a href="#cb7-675" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-676"><a href="#cb7-676" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-677"><a href="#cb7-677" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-678"><a href="#cb7-678" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-679"><a href="#cb7-679" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-680"><a href="#cb7-680" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-681"><a href="#cb7-681" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-682"><a href="#cb7-682" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-683"><a href="#cb7-683" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.7090</span></span>
+<span id="cb7-684"><a href="#cb7-684" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-685"><a href="#cb7-685" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-686"><a href="#cb7-686" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-687"><a href="#cb7-687" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-688"><a href="#cb7-688" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-689"><a href="#cb7-689" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-690"><a href="#cb7-690" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-691"><a href="#cb7-691" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-692"><a href="#cb7-692" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.6990</span></span>
+<span id="cb7-693"><a href="#cb7-693" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-694"><a href="#cb7-694" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-695"><a href="#cb7-695" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-696"><a href="#cb7-696" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-697"><a href="#cb7-697" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-698"><a href="#cb7-698" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-699"><a href="#cb7-699" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-700"><a href="#cb7-700" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-701"><a href="#cb7-701" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.6890</span></span>
+<span id="cb7-702"><a href="#cb7-702" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-703"><a href="#cb7-703" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-704"><a href="#cb7-704" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-705"><a href="#cb7-705" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-706"><a href="#cb7-706" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-707"><a href="#cb7-707" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-708"><a href="#cb7-708" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-709"><a href="#cb7-709" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-710"><a href="#cb7-710" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.6790</span></span>
+<span id="cb7-711"><a href="#cb7-711" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-712"><a href="#cb7-712" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-713"><a href="#cb7-713" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-714"><a href="#cb7-714" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-715"><a href="#cb7-715" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-716"><a href="#cb7-716" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-717"><a href="#cb7-717" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-718"><a href="#cb7-718" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-719"><a href="#cb7-719" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.6690</span></span>
+<span id="cb7-720"><a href="#cb7-720" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-721"><a href="#cb7-721" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-722"><a href="#cb7-722" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-723"><a href="#cb7-723" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-724"><a href="#cb7-724" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-725"><a href="#cb7-725" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-726"><a href="#cb7-726" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-727"><a href="#cb7-727" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-728"><a href="#cb7-728" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.6590</span></span>
+<span id="cb7-729"><a href="#cb7-729" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-730"><a href="#cb7-730" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-731"><a href="#cb7-731" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-732"><a href="#cb7-732" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-733"><a href="#cb7-733" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-734"><a href="#cb7-734" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-735"><a href="#cb7-735" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-736"><a href="#cb7-736" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-737"><a href="#cb7-737" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.6490</span></span>
+<span id="cb7-738"><a href="#cb7-738" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-739"><a href="#cb7-739" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-740"><a href="#cb7-740" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-741"><a href="#cb7-741" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-742"><a href="#cb7-742" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 433</span></span>
+<span id="cb7-743"><a href="#cb7-743" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23692</span></span>
+<span id="cb7-744"><a href="#cb7-744" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-745"><a href="#cb7-745" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-746"><a href="#cb7-746" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.6416</span></span>
+<span id="cb7-747"><a href="#cb7-747" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 2</span></span>
+<span id="cb7-748"><a href="#cb7-748" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-749"><a href="#cb7-749" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-750"><a href="#cb7-750" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-751"><a href="#cb7-751" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 396</span></span>
+<span id="cb7-752"><a href="#cb7-752" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23383</span></span>
+<span id="cb7-753"><a href="#cb7-753" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-754"><a href="#cb7-754" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-755"><a href="#cb7-755" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9990</span></span>
+<span id="cb7-756"><a href="#cb7-756" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-757"><a href="#cb7-757" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-758"><a href="#cb7-758" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-759"><a href="#cb7-759" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-760"><a href="#cb7-760" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 396</span></span>
+<span id="cb7-761"><a href="#cb7-761" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23383</span></span>
+<span id="cb7-762"><a href="#cb7-762" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-763"><a href="#cb7-763" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-764"><a href="#cb7-764" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9890</span></span>
+<span id="cb7-765"><a href="#cb7-765" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-766"><a href="#cb7-766" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-767"><a href="#cb7-767" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-768"><a href="#cb7-768" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-769"><a href="#cb7-769" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 396</span></span>
+<span id="cb7-770"><a href="#cb7-770" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23383</span></span>
+<span id="cb7-771"><a href="#cb7-771" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-772"><a href="#cb7-772" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-773"><a href="#cb7-773" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9790</span></span>
+<span id="cb7-774"><a href="#cb7-774" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-775"><a href="#cb7-775" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-776"><a href="#cb7-776" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-777"><a href="#cb7-777" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-778"><a href="#cb7-778" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 396</span></span>
+<span id="cb7-779"><a href="#cb7-779" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23383</span></span>
+<span id="cb7-780"><a href="#cb7-780" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-781"><a href="#cb7-781" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-782"><a href="#cb7-782" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9690</span></span>
+<span id="cb7-783"><a href="#cb7-783" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-784"><a href="#cb7-784" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-785"><a href="#cb7-785" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-786"><a href="#cb7-786" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-787"><a href="#cb7-787" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 396</span></span>
+<span id="cb7-788"><a href="#cb7-788" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23383</span></span>
+<span id="cb7-789"><a href="#cb7-789" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-790"><a href="#cb7-790" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-791"><a href="#cb7-791" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9590</span></span>
+<span id="cb7-792"><a href="#cb7-792" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 1</span></span>
+<span id="cb7-793"><a href="#cb7-793" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span>
+<span id="cb7-794"><a href="#cb7-794" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck</span></span>
+<span id="cb7-795"><a href="#cb7-795" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-796"><a href="#cb7-796" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of nodes: 396</span></span>
+<span id="cb7-797"><a href="#cb7-797" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of edges: 23383</span></span>
+<span id="cb7-798"><a href="#cb7-798" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-799"><a href="#cb7-799" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Running Louvain algorithm...</span></span>
+<span id="cb7-800"><a href="#cb7-800" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Maximum modularity in 10 random starts: 0.9495</span></span>
+<span id="cb7-801"><a href="#cb7-801" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Number of communities: 2</span></span>
+<span id="cb7-802"><a href="#cb7-802" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Elapsed time: 0 seconds</span></span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --><img src="data:image/png;base64,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" /><!-- --><img src="data:image/png;base64,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" /><!-- --> The CASi
+list after this function should contain seven elements:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(l1)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Data: t0 cells gene expression&quot;             </span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2] &quot;Data: t0 cell types&quot;                        </span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3] &quot;Data: t1 cell gene expression&quot;              </span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4] &quot;Neural network: setting&quot;                    </span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5] &quot;Neural network: training history&quot;           </span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6] &quot;Data: t1 cell types&quot;                        </span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [7] &quot;Data: t1 cell types (potential novel cells)&quot;</span></span></code></pre></div>
+</div>
+<div id="find-temporal-differentially-expressed-genes-tdegs" class="section level2">
+<h2>Find temporal differentially expressed genes (tDEGs)</h2>
+<p>This step performs differential analysis tailored to longitudinal
+scRNA-seq data. We combine a generalized linear model with iterative
+feature selection to select genes that have apparent
+increasing/decreasing behavior over time and genes that behave
+differently along time in different groups. Users of this function must
+provide the metadata of two variables: ‘Group’, which should be a binary
+factor variable, and ‘Time’, which can be either numerical or
+categorical variable. Below are the input parameters of the
+FindTemporalDEGs function:</p>
+<ul>
+<li>CASiList: The CASi list.</li>
+<li>metadata The dataframe containing the Group variable and the Time
+variable.</li>
+<li>pct.cutoff The percentage of cells that the gene is expressed.
+Default to 0.3.</li>
+<li>p.cutoff The cutoff p value of t-tests to determine tDEGs. Default
+to 0.05. Genes with the p value smaller than 0.05 will be considered
+tDEGs.</li>
+</ul>
+<p>To demonstrate this function, we manually adjusted the previous
+simulation dataset by adding cell-type-specific time/group effect. The
+demonstration list, “CASiList_tDEG_demo” and its corresponding metadata,
+“metadata_tDEG_demo” have been been lazy-loaded with the package. As
+shown below, the metadata should contain a Group variable and a Time
+variable, and the row number should match the total cell number of your
+data.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;CASiList_tDEG_demo&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;metadata_tDEG_demo&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(metadata_tDEG_demo)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     Group               Time          </span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Length:3097        Length:3097       </span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Class :character   Class :character  </span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Mode  :character   Mode  :character</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>nCell_t0 <span class="ot">&lt;-</span> <span class="fu">length</span>(CASiList_tDEG_demo[[<span class="dv">2</span>]])</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>nCell_t1 <span class="ot">&lt;-</span> <span class="fu">length</span>(CASiList_tDEG_demo[[<span class="dv">6</span>]])</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>nCell_t0 <span class="sc">+</span> nCell_t1</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 3097</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>l2 <span class="ot">&lt;-</span> <span class="fu">FindTemporalDEGs</span>(CASiList_tDEG_demo, metadata_tDEG_demo)</span></code></pre></div>
+<p>The CASi list after this function should contain eight elements:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(l2)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Data: t0 cells gene expression&quot;             </span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2] &quot;Data: t0 cell types&quot;                        </span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3] &quot;Data: t1 cell gene expression&quot;              </span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4] &quot;Neural network: setting&quot;                    </span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5] &quot;Neural network: training history&quot;           </span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [6] &quot;Data: t1 cell types&quot;                        </span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [7] &quot;Data: t1 cell types (potential novel cells)&quot;</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [8] &quot;Cell-type-specific p-value of temporal DEGs&quot;</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
