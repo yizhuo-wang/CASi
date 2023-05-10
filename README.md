@@ -8,13 +8,8 @@
 </tr>
 </table>
 
-![Fig1_big](https://user-images.githubusercontent.com/88061326/236935983-1fdb3534-6670-47e3-93ee-338de92799aa.png)
 
-
-
-## Site
-
-This site is under reconstruction.
+![Fig1_big](https://github.com/yizhuo-wang/CASi/assets/88061326/75620fc2-b1f6-40d4-81f5-0fe0a08a3017)
 
 
 ## Installation
@@ -26,11 +21,13 @@ require(devtools)
 devtools::install_github("yizhuo-wang/CASi")
 ```
 
-Alternatively, you can download the zip file and install it from local.
+Alternatively, you can download the zip file and install it from using:
 
 ```
 install.packages("file_name_and_path", repos = NULL, type="source")
 ```
+
+OR, if you have RStudio installed, you can download the zip file and open the CASi.Rproj to install the whole package.
 
 ## Usage
 
@@ -41,24 +38,16 @@ require(keras)
 require(CASi)
 ```
 
-## Development
+## Input
 
-- Fork the repo
-- Create a new branch (`git checkout -b improve-feature`)
-- Make the appropriate changes in the files
-- Add changes to reflect the changes made
-- Commit your changes (`git commit -am 'Improve feature'`)
-- Push to the branch (`git push origin improve-feature`)
-- Create a Pull Request 
-
-### Input
-
-
+- Gene expression matrix of the initial data point/t0.
+- Gene expression matrix of the following data points/t1.
+- (optional) Cell labels of the initial data point.
 
 
 ## Vignettes
 
-A thorough demonstration can be found at .
+A thorough demonstration can be found at the CASi.html file under the Vignettes folder.
 
 ## To-do
 - Publish on Bioconductor.
