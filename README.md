@@ -14,6 +14,8 @@
 
 ## Installation
 
+In R:
+
 ```
 require(devtools)
 devtools::install_github("yizhuo-wang/CASi")
@@ -45,7 +47,7 @@ require(CASi)
 
 ## Vignettes
 
-A thorough demonstration can be found at the CASi.html file at https://github.com/yizhuo-wang/CASi/blob/master/index.html. under the Vignettes folder.
+A thorough demonstration can be found at https://github.com/yizhuo-wang/CASi/blob/vignettes/CASi.html.
 
 ## To-do
 - Publish on Bioconductor.
