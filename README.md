@@ -47,7 +47,7 @@ require(CASi)
 
 ## Vignettes
 
-A thorough demonstration can be found at https://github.com/yizhuo-wang/CASi/blob/vignettes/CASi.html.
+A thorough demonstration can be found at [https://github.com/yizhuo-wang/CASi/blob/vignettes/CASi.html](https://yizhuo-wang.github.io/).
 
 ## To-do
 - Publish on Bioconductor.
