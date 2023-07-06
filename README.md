@@ -14,7 +14,7 @@
 
 ## Installation
 
-In R:
+The installation instructions are the same for both MacOS users and Windows users. In R:
 
 ```
 require(devtools)
@@ -27,7 +27,7 @@ Alternatively, you can download the zip file and install it from using:
 install.packages("file_name_and_path", repos = NULL, type="source")
 ```
 
-OR, if you have RStudio installed, you can download the zip file and open the CASi.Rproj to install the whole package.
+OR, in RStudio, you can download the zip file and open the CASi.Rproj to install the whole package.
 
 ## Usage
 
