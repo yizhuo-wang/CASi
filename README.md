@@ -14,8 +14,6 @@
 
 ## Installation
 
-Before the installation, please make sure to install JAGS-4.x.y.exe from http://www.sourceforge.net/projects/mcmc-jags/files. 
-
 ```
 require(devtools)
 devtools::install_github("yizhuo-wang/CASi")
