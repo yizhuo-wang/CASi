@@ -45,7 +45,7 @@ require(CASi)
 
 ## Vignettes
 
-A thorough demonstration can be found at the CASi.html file under the Vignettes folder.
+A thorough demonstration can be found at the CASi.html file at https://github.com/yizhuo-wang/CASi/blob/master/index.html. under the Vignettes folder.
 
 ## To-do
 - Publish on Bioconductor.
